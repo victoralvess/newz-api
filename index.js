@@ -48,7 +48,7 @@ app.post('/bookmarks/:user', async (req, res) => {
   try {
     const payload = req.body
 
-    const source = await Source.findOrCreate({
+    const [source] = await Source.findOrCreate({
       where: {
         id: payload.source.id
       },
@@ -56,12 +56,12 @@ app.post('/bookmarks/:user', async (req, res) => {
         id: payload.source.id,
         name: payload.source.name
       },
-      transaction: t
     })
 
     const news = await News.create({
       ...payload,
-      source: payload.source.id
+      source: source.id,
+      publishedAt: new Date(payload.publishedAt)
     })
 
     const bookmark = Bookmark.create({
