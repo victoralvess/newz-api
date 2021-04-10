@@ -19,22 +19,26 @@ app.get('/bookmarks/:user', async (req, res) => {
         user: req.params.user
       },
       include: {
-        model: News,
-        include: {
-          model: Source
-        }
+        model: News
       }
     })
 
-    return res.send(bookmarks.map((bookmark) => {
+    const news = await Promise.all(bookmarks.map(async (bookmark) => {
       const news = bookmark.News
+      const source = await Source.findOne({
+        where: {
+          id: news.source
+        }
+      })
 
       return {
         ...news.toJSON(),
-        source: news.Source.toJSON(),
+        source: source.toJSON(),
         Source: undefined
       }
     }))
+
+    return res.send(news)
   } catch (e) {
     return res.status(500).send({
       message: e.message
