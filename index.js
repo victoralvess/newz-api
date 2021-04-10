@@ -20,7 +20,8 @@ app.get('/bookmarks/:user', async (req, res) => {
       },
       include: {
         model: News
-      }
+      },
+      order: [['updatedAt', 'DESC']]
     })
 
     const news = await Promise.all(bookmarks.map(async (bookmark) => {
