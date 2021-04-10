@@ -80,10 +80,15 @@ app.post('/bookmarks/:user', async (req, res) => {
 
     console.log('[REQUEST]', 'SOURCE')
 
-    const news = await News.create({
-      ...payload,
-      source: source.id,
-      publishedAt: new Date(payload.publishedAt)
+    const [news] = await News.findOrCreate({
+      where: {
+        url: payload.url
+      },
+      defaults: {
+        ...payload,
+        source: source.id,
+        publishedAt: new Date(payload.publishedAt)
+      }
     })
 
     console.log('[REQUEST]', 'NEWS')
@@ -101,6 +106,28 @@ app.post('/bookmarks/:user', async (req, res) => {
   } catch (e) {
     console.log('[REQUEST]', e.message, e.stack)
 
+    return res.status(500).send({
+      message: e.message
+    })
+  }
+})
+
+app.delete('/bookmarks/:user', async (req, res) => {
+  try {
+    const bookmark = await Bookmark.findOne({
+      where: {
+        user: req.params.user,
+        news: req.body.url
+      }
+    })
+
+    if (!bookmark) {
+      return res.status(404).end();
+    } else {
+      await bookmark.destroy()
+      return res.status(204).end();
+    }
+  } catch (e) {
     return res.status(500).send({
       message: e.message
     })
