@@ -47,6 +47,7 @@ app.get('/bookmarks/:user', async (req, res) => {
 })
 
 app.post('/bookmarks/:user', async (req, res) => {
+  console.log('[REQUEST]', JSON.stringify(req.body))
   const t = await db.transaction();
 
   try {
@@ -63,16 +64,22 @@ app.post('/bookmarks/:user', async (req, res) => {
       transaction: t
     })
 
+    console.log('[REQUEST]', 'SOURCE')
+
     const news = await News.create({
       ...payload,
       source: source.id,
       publishedAt: new Date(payload.publishedAt)
     }, { transaction: t })
 
+    console.log('[REQUEST]', 'NEWS')
+
     const bookmark = Bookmark.create({
       user: req.params.user,
       news: payload.url
     }, { transaction: t })
+
+    console.log('[REQUEST]', 'BOOKMARK')
     
     await t.commit()
 
@@ -80,6 +87,7 @@ app.post('/bookmarks/:user', async (req, res) => {
     data.source = source.toJSON()
     return res.send(data)
   } catch (e) {
+    console.log('[REQUEST]', e.message, e.stack)
     await t.rollback()
 
     return res.status(500).send({
