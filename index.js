@@ -112,7 +112,8 @@ app.post('/bookmarks/:user', async (req, res) => {
   }
 })
 
-app.delete('/bookmarks/:user', async (req, res) => {
+// it makes the call from the client app easier
+app.post('/bookmarks/:user/delete', async (req, res) => {
   try {
     const bookmark = await Bookmark.findOne({
       where: {
