@@ -46,6 +46,23 @@ app.get('/bookmarks/:user', async (req, res) => {
   }
 })
 
+app.post('/bookmarks/:user/check', async (req, res) => {
+  try {
+    const bookmark = await Bookmark.findOne({
+      where: {
+        user: req.params.user,
+        news: req.body.url
+      }
+    })
+    
+    return res.status(!!bookmark ? 200 : 404).send(!!bookmark)
+  } catch (e) {
+    return res.status(500).send({
+      message: e.message
+    })
+  }
+})
+
 app.post('/bookmarks/:user', async (req, res) => {
   console.log('[REQUEST]', JSON.stringify(req.body))
   try {
