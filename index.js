@@ -43,6 +43,7 @@ app.get('/bookmarks/:user', async (req, res) => {
 })
 
 app.post('/bookmarks/:user', async (req, res) => {
+  console.log('[REQUEST]', req.body)
   const t = await db.transaction();
 
   try {
