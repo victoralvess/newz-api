@@ -1,0 +1,19 @@
+{
+  "name": "newz-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victoralvess/newz-api.git"
+  },
+  "author": "Victor Alves <victoralves28.pg@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/victoralvess/newz-api/issues"
+  },
+  "homepage": "https://github.com/victoralvess/newz-api#readme"
+}
