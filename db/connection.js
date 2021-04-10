@@ -1,4 +1,6 @@
 const path = require('path')
-const sqlite3 = require('sqlite3')
+const { Sequelize } = require('sequelize');
 
-module.exports = new sqlite3.Database(path.join(__dirname, '../dbfile'));
+const sequelize = new Sequelize(`sqlite:${path.join(__dirname, '../dbfile.db')}`);
+module.exports = sequelize;
+module.exports.sequelize = sequelize;
