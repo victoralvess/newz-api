@@ -43,7 +43,6 @@ app.get('/bookmarks/:user', async (req, res) => {
 })
 
 app.post('/bookmarks/:user', async (req, res) => {
-  console.log('[REQUEST]', req.body)
   const t = await db.transaction();
 
   try {
@@ -57,18 +56,19 @@ app.post('/bookmarks/:user', async (req, res) => {
         id: payload.source.id,
         name: payload.source.name
       },
+      transaction: t
     })
 
     const news = await News.create({
       ...payload,
       source: source.id,
       publishedAt: new Date(payload.publishedAt)
-    })
+    }, { transaction: t })
 
     const bookmark = Bookmark.create({
       user: req.params.user,
       news: payload.url
-    })
+    }, { transaction: t })
     
     await t.commit()
 

@@ -25,10 +25,6 @@ const News = sequelize.define(
     },
     source: {
       type: DataTypes.TEXT,
-      references: {
-        model: Source,
-        key: 'id'
-      }
     },
     author: {
       type: DataTypes.TEXT,
@@ -53,7 +49,5 @@ const News = sequelize.define(
     tableName: 'news'
   }
 )
-
-News.hasOne(Source, { sourceKey: 'source', foreignKey: 'id' })
 
 module.exports = News
