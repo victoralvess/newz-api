@@ -54,6 +54,6 @@ const News = sequelize.define(
   }
 )
 
-News.hasOne(Source)
+News.hasOne(Source, { sourceKey: 'source', foreignKey: 'id' })
 
 module.exports = News

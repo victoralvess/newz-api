@@ -30,7 +30,6 @@ const Bookmark = sequelize.define(
   }
 )
 
-Bookmark.hasOne(News, {sourceKey: 'news', foreignKey: 'url'})
-// News.belongsTo(Bookmark)
+Bookmark.hasOne(News, { sourceKey: 'news', foreignKey: 'url' })
 
 module.exports = Bookmark;

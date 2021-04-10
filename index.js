@@ -18,11 +18,22 @@ app.get('/bookmarks/:user', async (req, res) => {
       where: {
         user: req.params.user
       },
-      include: News
+      include: {
+        model: News,
+        include: {
+          model: Source
+        }
+      }
     })
 
     return res.send(bookmarks.map((bookmark) => {
-      return bookmark.News.toJSON()
+      const news = bookmark.News
+
+      return {
+        ...news.toJSON(),
+        source: news.Source.toJSON(),
+        Source: undefined
+      }
     }))
   } catch (e) {
     return res.status(500).send({
@@ -37,7 +48,7 @@ app.post('/bookmarks/:user', async (req, res) => {
   try {
     const payload = req.body
 
-    await Source.findOrCreate({
+    const source = await Source.findOrCreate({
       where: {
         id: payload.source.id
       },
@@ -60,7 +71,9 @@ app.post('/bookmarks/:user', async (req, res) => {
     
     await t.commit()
 
-    return res.send(news)
+    const data = news.toJSON()
+    data.source = source.toJSON()
+    return res.send(data)
   } catch (e) {
     await t.rollback()
 
